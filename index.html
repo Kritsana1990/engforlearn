@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบฝึกหัดอ่านออกเสียงภาษาอังกฤษ (A1/A2)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen flex flex-col items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full mt-10">
+    <h1 class="text-2xl font-bold text-center mb-6 text-blue-700">แบบฝึกหัดอ่านออกเสียงภาษาอังกฤษ</h1>
+    <div class="flex justify-center mb-6 gap-4">
+      <button id="a1-btn" class="level-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">ระดับ A1</button>
+      <button id="a2-btn" class="level-btn bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-blue-200">ระดับ A2</button>
+    </div>
+    <div id="exercise-box"></div>
+    <div class="mt-6 text-center">
+      <button id="prev-btn" class="bg-gray-200 px-4 py-2 rounded mr-2 hover:bg-gray-300">ก่อนหน้า</button>
+      <button id="next-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">ถัดไป</button>
+    </div>
+  </div>
+  <script>
+const data = {
+  'Unit 1': {
+    'Greetings': [
+      { en: "Hello!", th: "สวัสดี!" },
+      { en: "Good morning!", th: "สวัสดีตอนเช้า!" },
+      { en: "How are you?", th: "คุณสบายดีไหม?" },
+      { en: "Nice to meet you.", th: "ยินดีที่ได้รู้จัก" },
+      { en: "Good afternoon!", th: "สวัสดีตอนบ่าย!" }
+    ],
+    'Farewell': [
+      { en: "Goodbye!", th: "ลาก่อน!" },
+      { en: "See you later!", th: "แล้วพบกันใหม่!" },
+      { en: "Take care!", th: "ดูแลตัวเองนะ!" },
+      { en: "Have a nice day!", th: "ขอให้เป็นวันที่ดี!" },
+      { en: "See you tomorrow!", th: "เจอกันพรุ่งนี้!" }
+    ]
+  },
+  'Unit 2': {
+    'Animals': [
+      { en: "cat", th: "แมว" },
+      { en: "dog", th: "สุนัข" },
+      { en: "elephant", th: "ช้าง" },
+      { en: "bird", th: "นก" },
+      { en: "fish", th: "ปลา" },
+      { en: "rabbit", th: "กระต่าย" }
+    ],
+    'Fruits': [
+      { en: "apple", th: "แอปเปิ้ล" },
+      { en: "banana", th: "กล้วย" },
+      { en: "orange", th: "ส้ม" },
+      { en: "grape", th: "องุ่น" },
+      { en: "mango", th: "มะม่วง" }
+    ]
+  },
+  'Unit 3': {
+    'Family': [
+      { en: "father", th: "พ่อ" },
+      { en: "mother", th: "แม่" },
+      { en: "sister", th: "พี่สาว/น้องสาว" },
+      { en: "brother", th: "พี่ชาย/น้องชาย" },
+      { en: "grandmother", th: "ยาย/ย่า" }
+    ],
+    'Numbers': [
+      { en: "one", th: "หนึ่ง" },
+      { en: "two", th: "สอง" },
+      { en: "three", th: "สาม" },
+      { en: "four", th: "สี่" },
+      { en: "five", th: "ห้า" },
+      { en: "six", th: "หก" }
+    ]
+  },
+  'Unit 4': {
+    'Colors': [
+      { en: "red", th: "สีแดง" },
+      { en: "blue", th: "สีน้ำเงิน" },
+      { en: "green", th: "สีเขียว" },
+      { en: "yellow", th: "สีเหลือง" },
+      { en: "black", th: "สีดำ" }
+    ],
+    'Shapes': [
+      { en: "circle", th: "วงกลม" },
+      { en: "square", th: "สี่เหลี่ยมจัตุรัส" },
+      { en: "triangle", th: "สามเหลี่ยม" },
+      { en: "rectangle", th: "สี่เหลี่ยมผืนผ้า" }
+    ]
+  },
+  'Unit 5': {
+    'Food': [
+      { en: "rice", th: "ข้าว" },
+      { en: "noodle", th: "ก๋วยเตี๋ยว" },
+      { en: "bread", th: "ขนมปัง" },
+      { en: "egg", th: "ไข่" },
+      { en: "chicken", th: "ไก่" }
+    ],
+    'Drinks': [
+      { en: "water", th: "น้ำ" },
+      { en: "milk", th: "นม" },
+      { en: "juice", th: "น้ำผลไม้" },
+      { en: "tea", th: "ชา" }
+    ]
+  },
+  'Unit 6': {
+    'School': [
+      { en: "teacher", th: "ครู" },
+      { en: "student", th: "นักเรียน" },
+      { en: "classroom", th: "ห้องเรียน" },
+      { en: "book", th: "หนังสือ" },
+      { en: "pencil", th: "ดินสอ" }
+    ],
+    'Classroom': [
+      { en: "desk", th: "โต๊ะ" },
+      { en: "chair", th: "เก้าอี้" },
+      { en: "board", th: "กระดาน" },
+      { en: "bag", th: "กระเป๋า" }
+    ]
+  },
+  'Unit 7': {
+    'Weather': [
+      { en: "rainy", th: "ฝนตก" },
+      { en: "sunny", th: "แดดออก" },
+      { en: "cloudy", th: "มีเมฆ" },
+      { en: "windy", th: "ลมแรง" }
+    ],
+    'Seasons': [
+      { en: "summer", th: "ฤดูร้อน" },
+      { en: "winter", th: "ฤดูหนาว" },
+      { en: "rainy season", th: "ฤดูฝน" }
+    ]
+  },
+  'Unit 8': {
+    'Places': [
+      { en: "market", th: "ตลาด" },
+      { en: "hospital", th: "โรงพยาบาล" },
+      { en: "school", th: "โรงเรียน" },
+      { en: "park", th: "สวนสาธารณะ" }
+    ],
+    'Transport': [
+      { en: "bus", th: "รถบัส" },
+      { en: "train", th: "รถไฟ" },
+      { en: "car", th: "รถยนต์" },
+      { en: "bicycle", th: "จักรยาน" }
+    ]
+  },
+  'Unit 9': {
+    'Actions': [
+      { en: "run", th: "วิ่ง" },
+      { en: "walk", th: "เดิน" },
+      { en: "jump", th: "กระโดด" },
+      { en: "sit", th: "นั่ง" },
+      { en: "stand", th: "ยืน" }
+    ],
+    'Feelings': [
+      { en: "happy", th: "มีความสุข" },
+      { en: "sad", th: "เศร้า" },
+      { en: "angry", th: "โกรธ" },
+      { en: "excited", th: "ตื่นเต้น" }
+    ]
+  },
+  'Unit 10': {
+    'Daily routines': [
+      { en: "wake up", th: "ตื่นนอน" },
+      { en: "go to bed", th: "เข้านอน" },
+      { en: "brush teeth", th: "แปรงฟัน" },
+      { en: "have breakfast", th: "กินอาหารเช้า" },
+      { en: "go to school", th: "ไปโรงเรียน" }
+    ],
+    'Hobbies': [
+      { en: "draw", th: "วาดรูป" },
+      { en: "read", th: "อ่านหนังสือ" },
+      { en: "play football", th: "เล่นฟุตบอล" },
+      { en: "sing", th: "ร้องเพลง" }
+    ]
+  }
+};
+const dataA2 = {
+  'Unit 1': {
+    'Greetings': [
+      { en: "How do you do?", th: "สวัสดีครับ/ค่ะ (ทางการ)" },
+      { en: "Pleased to meet you.", th: "ยินดีที่ได้พบคุณ" },
+      { en: "It's a pleasure.", th: "เป็นเกียรติที่ได้พบ" },
+      { en: "Long time no see!", th: "ไม่ได้เจอกันนานเลย!" },
+      { en: "How have you been?", th: "เป็นอย่างไรบ้าง?" }
+    ],
+    'Farewell': [
+      { en: "Farewell!", th: "ลาก่อน (ทางการ)" },
+      { en: "Safe travels!", th: "เดินทางปลอดภัย!" },
+      { en: "All the best!", th: "ขอให้โชคดี!" },
+      { en: "Take it easy!", th: "ดูแลตัวเองนะ!" }
+    ]
+  },
+  'Unit 2': {
+    'Animals': [
+      { en: "giraffe", th: "ยีราฟ" },
+      { en: "dolphin", th: "ปลาโลมา" },
+      { en: "kangaroo", th: "จิงโจ้" },
+      { en: "penguin", th: "เพนกวิน" },
+      { en: "tiger", th: "เสือ" }
+    ],
+    'Fruits': [
+      { en: "pineapple", th: "สับปะรด" },
+      { en: "watermelon", th: "แตงโม" },
+      { en: "strawberry", th: "สตรอว์เบอร์รี่" },
+      { en: "cherry", th: "เชอร์รี่" }
+    ]
+  },
+  'Unit 3': {
+    'Family': [
+      { en: "uncle", th: "ลุง/อา/น้า" },
+      { en: "aunt", th: "ป้า/น้า/อา (ผู้หญิง)" },
+      { en: "cousin", th: "ลูกพี่ลูกน้อง" },
+      { en: "nephew", th: "หลานชาย" },
+      { en: "niece", th: "หลานสาว" }
+    ],
+    'Numbers': [
+      { en: "seven", th: "เจ็ด" },
+      { en: "eight", th: "แปด" },
+      { en: "nine", th: "เก้า" },
+      { en: "ten", th: "สิบ" },
+      { en: "eleven", th: "สิบเอ็ด" }
+    ]
+  },
+  'Unit 4': {
+    'Colors': [
+      { en: "purple", th: "สีม่วง" },
+      { en: "brown", th: "สีน้ำตาล" },
+      { en: "grey", th: "สีเทา" },
+      { en: "pink", th: "สีชมพู" }
+    ],
+    'Shapes': [
+      { en: "oval", th: "วงรี" },
+      { en: "diamond", th: "รูปสี่เหลี่ยมขนมเปียกปูน" },
+      { en: "star", th: "รูปดาว" }
+    ]
+  },
+  'Unit 5': {
+    'Food': [
+      { en: "noodles", th: "บะหมี่/เส้นก๋วยเตี๋ยว" },
+      { en: "sandwich", th: "แซนด์วิช" },
+      { en: "cheese", th: "ชีส" },
+      { en: "sausage", th: "ไส้กรอก" }
+    ],
+    'Drinks': [
+      { en: "coffee", th: "กาแฟ" },
+      { en: "lemonade", th: "น้ำมะนาว" },
+      { en: "coconut water", th: "น้ำมะพร้าว" }
+    ]
+  },
+  'Unit 6': {
+    'School': [
+      { en: "principal", th: "ผู้อำนวยการ" },
+      { en: "classmate", th: "เพื่อนร่วมชั้น" },
+      { en: "homework", th: "การบ้าน" },
+      { en: "exam", th: "การสอบ" }
+    ],
+    'Classroom': [
+      { en: "eraser", th: "ยางลบ" },
+      { en: "ruler", th: "ไม้บรรทัด" },
+      { en: "notebook", th: "สมุด" }
+    ]
+  },
+  'Unit 7': {
+    'Weather': [
+      { en: "foggy", th: "มีหมอก" },
+      { en: "stormy", th: "มีพายุ" },
+      { en: "snowy", th: "มีหิมะ" }
+    ],
+    'Seasons': [
+      { en: "spring", th: "ฤดูใบไม้ผลิ" },
+      { en: "autumn", th: "ฤดูใบไม้ร่วง" }
+    ]
+  },
+  'Unit 8': {
+    'Places': [
+      { en: "library", th: "ห้องสมุด" },
+      { en: "museum", th: "พิพิธภัณฑ์" },
+      { en: "cinema", th: "โรงภาพยนตร์" },
+      { en: "restaurant", th: "ร้านอาหาร" }
+    ],
+    'Transport': [
+      { en: "motorcycle", th: "รถจักรยานยนต์" },
+      { en: "aeroplane", th: "เครื่องบิน" },
+      { en: "boat", th: "เรือ" }
+    ]
+  },
+  'Unit 9': {
+    'Actions': [
+      { en: "swim", th: "ว่ายน้ำ" },
+      { en: "climb", th: "ปีน" },
+      { en: "draw", th: "วาด" },
+      { en: "write", th: "เขียน" }
+    ],
+    'Feelings': [
+      { en: "bored", th: "เบื่อ" },
+      { en: "nervous", th: "ประหม่า" },
+      { en: "proud", th: "ภูมิใจ" }
+    ]
+  },
+  'Unit 10': {
+    'Daily routines': [
+      { en: "do homework", th: "ทำการบ้าน" },
+      { en: "take a shower", th: "อาบน้ำ" },
+      { en: "have lunch", th: "กินข้าวกลางวัน" },
+      { en: "watch TV", th: "ดูทีวี" }
+    ],
+    'Hobbies': [
+      { en: "collect stamps", th: "สะสมแสตมป์" },
+      { en: "ride a bike", th: "ขี่จักรยาน" },
+      { en: "play chess", th: "เล่นหมากรุก" }
+    ]
+  }
+};
+let currentLevel = 'A1';
+let dataSet = data;
+let unit = 'Unit 1';
+let section = Object.keys(dataSet[unit])[0];
+let idx = 0;
+
+document.getElementById('a1-btn').onclick = function() {
+  currentLevel = 'A1';
+  dataSet = data;
+  unit = 'Unit 1';
+  section = Object.keys(dataSet[unit])[0];
+  idx = 0;
+  render();
+  this.classList.add('bg-blue-600','text-white');
+  this.classList.remove('bg-gray-300','text-gray-700');
+  document.getElementById('a2-btn').classList.remove('bg-blue-600','text-white');
+  document.getElementById('a2-btn').classList.add('bg-gray-300','text-gray-700');
+};
+document.getElementById('a2-btn').onclick = function() {
+  currentLevel = 'A2';
+  dataSet = dataA2;
+  unit = 'Unit 1';
+  section = Object.keys(dataSet[unit])[0];
+  idx = 0;
+  render();
+  this.classList.add('bg-blue-600','text-white');
+  this.classList.remove('bg-gray-300','text-gray-700');
+  document.getElementById('a1-btn').classList.remove('bg-blue-600','text-white');
+  document.getElementById('a1-btn').classList.add('bg-gray-300','text-gray-700');
+};
+
+function render() {
+  const box = document.getElementById('exercise-box');
+  const arr = dataSet[unit][section];
+  const item = arr[idx];
+  box.innerHTML = `
+    <div class='mb-4 flex gap-2'>
+      <label>บท:</label>
+      <select id='unit-select' class='border rounded px-2 py-1'>
+        ${Object.keys(dataSet).map(u => `<option value='${u}' ${u===unit?'selected':''}>${u}</option>`).join('')}
+      </select>
+      <label>หมวด:</label>
+      <select id='section-select' class='border rounded px-2 py-1'>
+        ${Object.keys(dataSet[unit]).map(s => `<option value='${s}' ${s===section?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>
+    <div class='text-lg font-semibold mb-2'>${item.en}</div>
+    <button onclick='playSound()' class='bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-2'>ฟังเสียง</button>
+    <div class='text-gray-600 mb-4'>${item.th}</div>
+    <div class='text-sm text-gray-500'>ข้อที่ ${idx+1} / ${arr.length}</div>
+    <button id='reset-btn' class='mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600'>เริ่มใหม่</button>
+  `;
+  document.getElementById('unit-select').onchange = function() {
+    unit = this.value;
+    section = Object.keys(dataSet[unit])[0];
+    idx = 0;
+    render();
+  };
+  document.getElementById('section-select').onchange = function() {
+    section = this.value;
+    idx = 0;
+    render();
+  };
+  document.getElementById('reset-btn').onclick = function() {
+    idx = 0;
+    render();
+  };
+}
+
+window.playSound = function() {
+  const utter = new SpeechSynthesisUtterance(dataSet[unit][section][idx].en);
+  utter.lang = 'en-GB';
+  window.speechSynthesis.speak(utter);
+};
+
+document.getElementById('prev-btn').onclick = function() {
+  if(idx > 0) { idx--; render(); }
+};
+document.getElementById('next-btn').onclick = function() {
+  if(idx < dataSet[unit][section].length-1) { idx++; render(); }
+};
+
+render();
+  </script>
+<!-- เกมจับคู่คำศัพท์ ป.5 -->
+<div class="bg-yellow-50 rounded-lg shadow-lg p-8 max-w-xl w-full mt-10">
+  <h2 class="text-xl font-bold text-center mb-4 text-yellow-700">เกมจับคู่คำศัพท์ภาษาอังกฤษ-ไทย (ป.5)</h2>
+  <div class="flex justify-center mb-4 gap-4">
+    <button id="match-a1-btn" class="match-level-btn bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">A1</button>
+    <button id="match-a2-btn" class="match-level-btn bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-yellow-200">A2</button>
+  </div>
+  <div id="matching-game"></div>
+  <div class="mt-4 text-center">
+    <button id="check-matching" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">ตรวจคำตอบ</button>
+    <button id="reset-matching" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 ml-2">เริ่มใหม่</button>
+  </div>
+  <div id="matching-result" class="mt-4 text-center font-bold"></div>
+</div>
+<script>
+// ข้อมูลคำศัพท์ (A1)
+const matchingWordsA1 = [
+  { en: "library", th: "ห้องสมุด" },
+  { en: "pencil", th: "ดินสอ" },
+  { en: "teacher", th: "ครู" },
+  { en: "student", th: "นักเรียน" },
+  { en: "book", th: "หนังสือ" },
+  { en: "eraser", th: "ยางลบ" }
+];
+// ข้อมูลคำศัพท์ (A2)
+const matchingWordsA2 = [
+  { en: "principal", th: "ผู้อำนวยการ" },
+  { en: "classmate", th: "เพื่อนร่วมชั้น" },
+  { en: "homework", th: "การบ้าน" },
+  { en: "exam", th: "การสอบ" },
+  { en: "notebook", th: "สมุด" },
+  { en: "ruler", th: "ไม้บรรทัด" }
+];
+let matchingLevel = 'A1';
+let matchingWords = matchingWordsA1;
+let leftOrder = [];
+let rightOrder = [];
+let lines = [];
+let selectedLeft = null;
+let matches = {};
+
+function shuffle(arr) {
+  return arr.map(a => [a, Math.random()]).sort((a, b) => a[1] - b[1]).map(a => a[0]);
+}
+
+function renderMatchingGame() {
+  leftOrder = shuffle([...Array(matchingWords.length).keys()]);
+  rightOrder = shuffle([...Array(matchingWords.length).keys()]);
+  matches = {};
+  selectedLeft = null;
+  lines = [];
+  const leftCol = leftOrder.map((i, idx) => `<div class='left-word cursor-pointer border rounded p-2 mb-2 bg-white flex items-center gap-2' data-idx='${i}' id='left-${i}'>
+    <span>${matchingWords[i].en}</span>
+    <button class='match-speak-btn ml-2 text-yellow-700 border border-yellow-300 rounded px-2 py-1 text-xs' data-idx='${i}' title='ฟังเสียง'>🔊</button>
+  </div>`).join('');
+  const rightCol = rightOrder.map((i, idx) => `<div class='right-word cursor-pointer border rounded p-2 mb-2 bg-white' data-idx='${i}' id='right-${i}'>${matchingWords[i].th}</div>`).join('');
+  document.getElementById('matching-game').innerHTML = `
+    <div class='flex justify-between relative' style='min-height:220px;'>
+      <div class='flex flex-col items-start w-1/2 pr-4'>${leftCol}</div>
+      <svg id='matching-svg' class='absolute top-0 left-0 pointer-events-none' width='100%' height='220'></svg>
+      <div class='flex flex-col items-end w-1/2 pl-4'>${rightCol}</div>
+    </div>
+  `;
+  setTimeout(() => { bindMatchingEvents(); bindMatchSpeakEvents(); }, 100); // รอ DOM
+}
+
+document.getElementById('match-a1-btn').onclick = function() {
+  matchingLevel = 'A1';
+  matchingWords = matchingWordsA1;
+  renderMatchingGame();
+  this.classList.add('bg-yellow-600','text-white');
+  this.classList.remove('bg-gray-300','text-gray-700');
+  document.getElementById('match-a2-btn').classList.remove('bg-yellow-600','text-white');
+  document.getElementById('match-a2-btn').classList.add('bg-gray-300','text-gray-700');
+  document.getElementById('matching-result').innerHTML = '';
+};
+document.getElementById('match-a2-btn').onclick = function() {
+  matchingLevel = 'A2';
+  matchingWords = matchingWordsA2;
+  renderMatchingGame();
+  this.classList.add('bg-yellow-600','text-white');
+  this.classList.remove('bg-gray-300','text-gray-700');
+  document.getElementById('match-a1-btn').classList.remove('bg-yellow-600','text-white');
+  document.getElementById('match-a1-btn').classList.add('bg-gray-300','text-gray-700');
+  document.getElementById('matching-result').innerHTML = '';
+};
+
+function bindMatchingEvents() {
+  document.querySelectorAll('.left-word').forEach(el => {
+    el.onclick = function() {
+      document.querySelectorAll('.left-word').forEach(e => e.classList.remove('bg-blue-200'));
+      this.classList.add('bg-blue-200');
+      selectedLeft = parseInt(this.dataset.idx);
+    };
+  });
+  document.querySelectorAll('.right-word').forEach(el => {
+    el.onclick = function() {
+      if(selectedLeft !== null) {
+        matches[selectedLeft] = parseInt(this.dataset.idx);
+        drawLines();
+        document.querySelectorAll('.left-word').forEach(e => e.classList.remove('bg-blue-200'));
+        selectedLeft = null;
+      }
+    };
+  });
+}
+
+function drawLines() {
+  const svg = document.getElementById('matching-svg');
+  svg.innerHTML = '';
+  Object.keys(matches).forEach(leftIdx => {
+    const rightIdx = matches[leftIdx];
+    const leftEl = document.getElementById('left-' + leftIdx);
+    const rightEl = document.getElementById('right-' + rightIdx);
+    if(leftEl && rightEl) {
+      const leftRect = leftEl.getBoundingClientRect();
+      const rightRect = rightEl.getBoundingClientRect();
+      const parentRect = svg.parentElement.getBoundingClientRect();
+      const x1 = leftRect.right - parentRect.left;
+      const y1 = leftRect.top + leftRect.height/2 - parentRect.top;
+      const x2 = rightRect.left - parentRect.left;
+      const y2 = rightRect.top + rightRect.height/2 - parentRect.top;
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#f59e42');
+      line.setAttribute('stroke-width', '3');
+      svg.appendChild(line);
+    }
+  });
+}
+
+function bindMatchSpeakEvents() {
+  document.querySelectorAll('.match-speak-btn').forEach(btn => {
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      const idx = this.dataset.idx;
+      const utter = new SpeechSynthesisUtterance(matchingWords[idx].en);
+      utter.lang = 'en-GB';
+      window.speechSynthesis.speak(utter);
+    };
+  });
+}
+
+document.getElementById('check-matching').onclick = function() {
+  let correct = 0;
+  Object.keys(matches).forEach(leftIdx => {
+    if(matchingWords[leftIdx].th === matchingWords[matches[leftIdx]].th) correct++;
+  });
+  const total = matchingWords.length;
+  document.getElementById('matching-result').innerHTML = `ถูกต้อง ${correct} / ${total}`;
+};
+document.getElementById('reset-matching').onclick = function() {
+  renderMatchingGame();
+  document.getElementById('matching-result').innerHTML = '';
+};
+
+renderMatchingGame();
+  </script>
+<!-- เกมจัดหมวดหมู่อาหาร -->
+<div class="bg-green-50 rounded-lg shadow-lg p-8 max-w-xl w-full mt-10">
+  <h2 class="text-xl font-bold text-center mb-4 text-green-700">เกมจัดหมวดหมู่อาหาร (Food Categorization)</h2>
+  <div id="food-categorization-game"></div>
+  <div class="mt-4 text-center">
+    <button id="check-food-categorization" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">ตรวจคำตอบ</button>
+    <button id="reset-food-categorization" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 ml-2">เริ่มใหม่</button>
+  </div>
+  <div id="food-categorization-result" class="mt-4 text-center font-bold"></div>
+</div>
+<script>
+// ข้อมูลคำศัพท์อาหารและหมวดหมู่
+const foodCategories = [
+  { key: 'fruit', label: 'ผลไม้' },
+  { key: 'drink', label: 'เครื่องดื่ม' },
+  { key: 'main', label: 'อาหารคาว' }
+];
+const foodWords = [
+  { en: 'apple', cat: 'fruit' },
+  { en: 'banana', cat: 'fruit' },
+  { en: 'grape', cat: 'fruit' },
+  { en: 'water', cat: 'drink' },
+  { en: 'milk', cat: 'drink' },
+  { en: 'juice', cat: 'drink' },
+  { en: 'rice', cat: 'main' },
+  { en: 'noodle', cat: 'main' },
+  { en: 'chicken', cat: 'main' }
+];
+let foodWordsOrder = [];
+let foodUserAnswer = {};
+
+function shuffleFood(arr) {
+  return arr.map(a => [a, Math.random()]).sort((a, b) => a[1] - b[1]).map(a => a[0]);
+}
+
+function renderFoodCategorizationGame() {
+  foodWordsOrder = shuffleFood([...Array(foodWords.length).keys()]);
+  foodUserAnswer = {};
+  const wordButtons = foodWordsOrder.map(i => `<button class='food-word-btn border rounded px-3 py-1 m-1 bg-white hover:bg-green-100 flex items-center gap-2' data-idx='${i}'>
+    <span>${foodWords[i].en}</span>
+    <button class='food-speak-btn ml-2 text-green-700 border border-green-300 rounded px-2 py-1 text-xs' data-idx='${i}' title='ฟังเสียง'>🔊</button>
+  </button>`).join('');
+  const categories = foodCategories.map(cat => `
+    <div class='w-1/3'>
+      <div class='font-bold mb-2 text-center'>${cat.label}</div>
+      <div class='min-h-[48px] border rounded p-2 bg-white mb-2' id='food-drop-${cat.key}'></div>
+    </div>
+  `).join('');
+  document.getElementById('food-categorization-game').innerHTML = `
+    <div class='mb-4 flex flex-wrap justify-center'>${wordButtons}</div>
+    <div class='flex gap-4'>${categories}</div>
+  `;
+  bindFoodCategorizationEvents();
+  bindFoodSpeakEvents();
+}
+
+function bindFoodCategorizationEvents() {
+  document.querySelectorAll('.food-word-btn').forEach(btn => {
+    btn.onclick = function() {
+      const idx = this.dataset.idx;
+      // เลือกหมวดหมู่
+      let catBtns = foodCategories.map(cat => `<button class='choose-cat-btn border rounded px-2 py-1 m-1 bg-green-100 hover:bg-green-200' data-idx='${idx}' data-cat='${cat.key}'>${cat.label}</button>`).join('');
+      const dialog = document.createElement('div');
+      dialog.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50';
+      dialog.innerHTML = `<div class='bg-white p-4 rounded shadow-lg'>
+        <div class='mb-2'>เลือกหมวดหมู่สำหรับ <b>${foodWords[idx].en}</b></div>
+        <div>${catBtns}</div>
+        <div class='mt-2 text-center'><button class='close-cat-dialog text-red-500 underline'>ยกเลิก</button></div>
+      </div>`;
+      document.body.appendChild(dialog);
+      dialog.querySelectorAll('.choose-cat-btn').forEach(catBtn => {
+        catBtn.onclick = function() {
+          const cat = this.dataset.cat;
+          foodUserAnswer[idx] = cat;
+          // แสดงในหมวดหมู่
+          const dropDiv = document.getElementById('food-drop-' + cat);
+          dropDiv.appendChild(btn);
+          document.body.removeChild(dialog);
+        };
+      });
+      dialog.querySelector('.close-cat-dialog').onclick = function() {
+        document.body.removeChild(dialog);
+      };
+    };
+  });
+}
+
+function bindFoodSpeakEvents() {
+  document.querySelectorAll('.food-speak-btn').forEach(btn => {
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      const idx = this.dataset.idx;
+      const utter = new SpeechSynthesisUtterance(foodWords[idx].en);
+      utter.lang = 'en-GB';
+      window.speechSynthesis.speak(utter);
+    };
+  });
+}
+
+document.getElementById('check-food-categorization').onclick = function() {
+  let correct = 0;
+  Object.keys(foodUserAnswer).forEach(idx => {
+    if(foodWords[idx].cat === foodUserAnswer[idx]) correct++;
+  });
+  const total = foodWords.length;
+  document.getElementById('food-categorization-result').innerHTML = `ถูกต้อง ${correct} / ${total}`;
+};
+document.getElementById('reset-food-categorization').onclick = function() {
+  renderFoodCategorizationGame();
+  document.getElementById('food-categorization-result').innerHTML = '';
+};
+
+renderFoodCategorizationGame();
+  </script>
+<!-- เกมทายคำเปิดแผ่นป้ายคำศัพท์ (Flip Card Vocabulary Game) -->
+<div class="bg-purple-50 rounded-lg shadow-lg p-8 max-w-xl w-full mt-10">
+  <h2 class="text-xl font-bold text-center mb-4 text-purple-700">เกมทายคำเปิดแผ่นป้ายคำศัพท์</h2>
+  <div class="flex justify-center mb-4 gap-2">
+    <select id="flipcat-select" class="border rounded px-2 py-1">
+      <option value="people">People & Family</option>
+      <option value="animal">Animal</option>
+      <option value="school">School Objects</option>
+      <option value="food">Food & Drinks</option>
+      <option value="places">Places</option>
+      <option value="verbs">Verbs</option>
+      <option value="adjectives">Adjectives</option>
+    </select>
+    <button id="flipcat-random" class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700">สุ่มหมวด</button>
+  </div>
+  <div id="flipcard-game" class="flex flex-wrap justify-center gap-4"></div>
+  <div id="flipcard-answer" class="mt-4 text-center font-bold text-purple-700"></div>
+</div>
+<footer class="mt-10 text-center text-gray-500">สร้างโดย Teacher Nui</footer>
+<script>
+const flipcardData = {
+  people: [
+    { en: 'father', th: 'พ่อ' },
+    { en: 'mother', th: 'แม่' },
+    { en: 'sister', th: 'พี่สาว/น้องสาว' },
+    { en: 'brother', th: 'พี่ชาย/น้องชาย' },
+    { en: 'teacher', th: 'ครู' },
+    { en: 'student', th: 'นักเรียน' }
+  ],
+  animal: [
+    { en: 'cat', th: 'แมว' },
+    { en: 'dog', th: 'สุนัข' },
+    { en: 'elephant', th: 'ช้าง' },
+    { en: 'rabbit', th: 'กระต่าย' },
+    { en: 'fish', th: 'ปลา' },
+    { en: 'bird', th: 'นก' }
+  ],
+  school: [
+    { en: 'book', th: 'หนังสือ' },
+    { en: 'pencil', th: 'ดินสอ' },
+    { en: 'eraser', th: 'ยางลบ' },
+    { en: 'desk', th: 'โต๊ะ' },
+    { en: 'chair', th: 'เก้าอี้' },
+    { en: 'bag', th: 'กระเป๋า' }
+  ],
+  food: [
+    { en: 'apple', th: 'แอปเปิ้ล' },
+    { en: 'banana', th: 'กล้วย' },
+    { en: 'rice', th: 'ข้าว' },
+    { en: 'milk', th: 'นม' },
+    { en: 'chicken', th: 'ไก่' },
+    { en: 'juice', th: 'น้ำผลไม้' }
+  ],
+  places: [
+    { en: 'school', th: 'โรงเรียน' },
+    { en: 'market', th: 'ตลาด' },
+    { en: 'hospital', th: 'โรงพยาบาล' },
+    { en: 'park', th: 'สวนสาธารณะ' },
+    { en: 'library', th: 'ห้องสมุด' },
+    { en: 'cinema', th: 'โรงภาพยนตร์' }
+  ],
+  verbs: [
+    { en: 'run', th: 'วิ่ง' },
+    { en: 'walk', th: 'เดิน' },
+    { en: 'read', th: 'อ่าน' },
+    { en: 'write', th: 'เขียน' },
+    { en: 'draw', th: 'วาด' },
+    { en: 'sing', th: 'ร้องเพลง' }
+  ],
+  adjectives: [
+    { en: 'happy', th: 'มีความสุข' },
+    { en: 'sad', th: 'เศร้า' },
+    { en: 'big', th: 'ใหญ่' },
+    { en: 'small', th: 'เล็ก' },
+    { en: 'fast', th: 'เร็ว' },
+    { en: 'slow', th: 'ช้า' }
+  ]
+};
+
+function shuffleFlip(arr) {
+  return arr.map(a => [a, Math.random()]).sort((a, b) => a[1] - b[1]).map(a => a[0]);
+}
+
+function renderFlipcardGame(cat) {
+  const words = shuffleFlip(flipcardData[cat]);
+  document.getElementById('flipcard-answer').innerHTML = '';
+  document.getElementById('flipcard-game').innerHTML = words.map((w, i) => `
+    <div class='flipcard border rounded shadow bg-white w-32 h-32 flex flex-col items-center justify-center relative'>
+      <button class='flipcard-speak absolute top-2 right-2 text-purple-700 border border-purple-300 rounded px-2 py-1 text-xs' data-en='${w.en}' title='ฟังเสียง'>🔊</button>
+      <div class='flipcard-front text-2xl font-bold cursor-pointer' data-th='${w.th}' data-en='${w.en}'>?</div>
+      <button class='flipcard-show mt-4 bg-purple-200 text-purple-800 px-2 py-1 rounded text-xs' data-th='${w.th}' data-en='${w.en}'>เฉลย</button>
+    </div>
+  `).join('');
+  bindFlipcardEvents();
+}
+
+document.getElementById('flipcat-select').onchange = function() {
+  renderFlipcardGame(this.value);
+};
+document.getElementById('flipcat-random').onclick = function() {
+  const keys = Object.keys(flipcardData);
+  const rand = keys[Math.floor(Math.random()*keys.length)];
+  document.getElementById('flipcat-select').value = rand;
+  renderFlipcardGame(rand);
+};
+
+function bindFlipcardEvents() {
+  document.querySelectorAll('.flipcard-front').forEach(el => {
+    el.onclick = function() {
+      this.innerHTML = this.dataset.en;
+    };
+  });
+  document.querySelectorAll('.flipcard-show').forEach(btn => {
+    btn.onclick = function() {
+      const en = this.dataset.en;
+      const th = this.dataset.th;
+      document.getElementById('flipcard-answer').innerHTML = `<span class='text-lg'>${en} = ${th}</span>`;
+    };
+  });
+  document.querySelectorAll('.flipcard-speak').forEach(btn => {
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      const en = this.dataset.en;
+      const utter = new SpeechSynthesisUtterance(en);
+      utter.lang = 'en-GB';
+      window.speechSynthesis.speak(utter);
+    };
+  });
+}
+
+renderFlipcardGame('people');
+  </script>
+</body>
+</html>
